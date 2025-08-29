@@ -5,4 +5,5 @@ class AppUrl{
   static String dashboard = "${baseUrl}dashboard";
   static String loadDelivery= "${baseUrl}load-delivery";
   static String start = "${baseUrl}start";
+  static String orderId = "${baseUrl}order_id";
 }

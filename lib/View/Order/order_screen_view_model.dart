@@ -31,16 +31,16 @@ class OrderScreenViewModel extends ChangeNotifier{
     notifyListeners();
   }
 
-  ApiResponse<OrderResponseModel?> dashboardResponse = ApiResponse.initial();
+  ApiResponse<OrderResponseModel?> orderResponse = ApiResponse.initial();
   AuthRepository authenticationRepository = AuthRepository();
   ValueNotifier<bool> loader = ValueNotifier(false);
   List<OrderDataResult> allOrder=[];
   Future<void> getAllOrder() async {
-    dashboardResponse = ApiResponse.loading();
+    orderResponse = ApiResponse.loading();
     notifyListeners();
     if (!isInternetAvailable.value) {
       AlertHelper.showAppSnackBar(context,message: "Please check your internet connection");
-      dashboardResponse = ApiResponse.noInternet();
+      orderResponse = ApiResponse.noInternet();
       notifyListeners();
       return;
     }
@@ -54,9 +54,9 @@ class OrderScreenViewModel extends ChangeNotifier{
     notifyListeners();
     try {
       var response = await authenticationRepository.callGetAllOrder(body);
-      dashboardResponse = ApiResponse.completed(response);
-      if (dashboardResponse.data!.result!.status ?? false) {
-        allOrder = dashboardResponse.data?.result?.result??[];
+      orderResponse = ApiResponse.completed(response);
+      if (orderResponse.data!.result!.status ?? false) {
+        allOrder = orderResponse.data?.result?.result??[];
         notifyListeners();
       } else {
         // AlertHelper.showAppSnackBar(context, message: loginResponse.data!.messages ?? "");
@@ -67,7 +67,7 @@ class OrderScreenViewModel extends ChangeNotifier{
       loader.value = false;
       notifyListeners();
       AppGlobal.printLog('OrderListResponse ==> $error');
-      dashboardResponse = ApiResponse.error(error.toString());
+      orderResponse = ApiResponse.error(error.toString());
       notifyListeners();
     }
   }
@@ -89,7 +89,7 @@ class OrderScreenViewModel extends ChangeNotifier{
               children: [
                 ResponsiveText(
                   maxLines: 5,
-                  text: 'Orders can only be accepted in sequence. Please accept your first pending order from the dashboard before proceeding with new ones.',
+                  text: 'Please process the current order as displayed in the dashboard.',
                   style: Fonts.regularTextStyleMedium.copyWith(
                     fontSize: fontSize_16
                   ),

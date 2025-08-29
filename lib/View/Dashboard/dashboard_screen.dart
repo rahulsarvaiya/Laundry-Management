@@ -653,7 +653,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   children: [
                     InkWell(
                       onTap: (){
-                        NavigatorHelper().add(OrderDetailScreen(isPick: true,isDelivery: false,));
+                        NavigatorHelper().add(OrderDetailScreen(isPick: true,isDelivery: false,isQuickOrder: false,orderId: viewModel.dashboardResult?.dashboardDisplayOrder?.orderId.toString(),orderType: viewModel.dashboardResult?.dashboardDisplayOrder?.orderType??"",));
                       },
                       child: Card(
                         elevation: 1,

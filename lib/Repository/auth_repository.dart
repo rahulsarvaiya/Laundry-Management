@@ -5,6 +5,7 @@ import 'package:driver/Model/load_delivery_response.dart';
 import 'package:driver/Model/login_response.dart';
 import 'package:driver/Model/order_response_model.dart';
 
+import '../Model/order_details_response_model.dart';
 import '../Network/app_url.dart';
 import '../Network/network_api_services.dart';
 import '../Utils/app_global.dart';
@@ -71,7 +72,23 @@ class AuthRepository{
       }
     }
     catch(e,st){
-      AppGlobal.printLog('callLoadDelivery error ==> ${e.toString()} $st');
+      AppGlobal.printLog('callGetAllOrder error ==> ${e.toString()} $st');
+      rethrow;
+    }
+  }
+
+  Future<OrderDetailsResponseModel> callOrderDetails(Map<String,dynamic> body)async{
+    try{
+      var response = await _apiServices.getPostApiResponse(AppUrl.orderId,jsonEncode(body));
+      OrderDetailsResponseModel orderListResponse = OrderDetailsResponseModel.fromJson(response);
+      if(orderListResponse.result!=null) {
+        return orderListResponse;
+      } else {
+        return orderListResponse;
+      }
+    }
+    catch(e,st){
+      AppGlobal.printLog('callOrderDetails error ==> ${e.toString()} $st');
       rethrow;
     }
   }
