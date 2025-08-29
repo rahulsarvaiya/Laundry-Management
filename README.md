@@ -1,16 +1,5 @@
-# driver
+Admin Url:
+https://wd.servicenet.in/web/login#action=1016&model=laundry.order&view_type=list&cids=1&menu_id=673
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+User name:naved@nomail.com
+Password:1234
