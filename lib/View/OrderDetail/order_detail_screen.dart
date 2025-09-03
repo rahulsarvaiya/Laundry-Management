@@ -189,6 +189,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                             text: viewModel.orderDetail?.address??"",
                             style: Fonts.regularTextStyleBold,
                             maxLines: 2,
+                            textAlign: TextAlign.start,
                           ),
                           //TODO:i ask to sir after check both address show required or not
                           // CommonWidget.getFieldSpacer(height: padding_04),
@@ -455,38 +456,38 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                             contentPadding: EdgeInsets.zero,
                             visualDensity: VisualDensity(horizontal: -4,vertical: -4),
                             title: Text("SubTotal",style: Fonts.regularTextStyleMedium,),
-                            trailing: Text("AED 5",style: Fonts.regularTextStyleBold,),
+                            trailing: Text(viewModel.orderDetail?.orderTotal??"",style: Fonts.regularTextStyleBold,),
                           ):SizedBox(),
-                          widget.isDelivery?ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            visualDensity: VisualDensity(horizontal: -4,vertical: -4),
-                            title: Text("GST(18%)",style: Fonts.regularTextStyleMedium,),
-                            trailing: Text("AED 5",style: Fonts.regularTextStyleBold,),
-                          ):SizedBox(),
+                          // widget.isDelivery?ListTile(
+                          //   contentPadding: EdgeInsets.zero,
+                          //   visualDensity: VisualDensity(horizontal: -4,vertical: -4),
+                          //   title: Text("GST(18%)",style: Fonts.regularTextStyleMedium,),
+                          //   trailing: Text("AED 5",style: Fonts.regularTextStyleBold,),
+                          // ):SizedBox(),
                           widget.isDelivery?Divider():SizedBox(),
                           widget.isDelivery?ListTile(
                             contentPadding: EdgeInsets.zero,
                             visualDensity: VisualDensity(horizontal: -4,vertical: -4),
                             title: Text("Total",style: Fonts.regularTextStyleBold,),
-                            trailing: Text("AED 5",style: Fonts.regularTextStyleBold,),
+                            trailing: Text(viewModel.orderDetail?.orderTotal??"",style: Fonts.regularTextStyleBold,),
                           ):SizedBox(),
                         ],
                       ),
                     ),
 
                     Visibility(
-                      visible: widget.isPick,
-                      replacement: Center(
-                        child: Padding(
-                          padding: EdgeInsets.only(left: padding_20,right: padding_20,bottom: AppGlobal.hasBottomNotch(context)?padding_20:padding_20,top: padding_40),
-                          child: ButtonView(
-                              buttonTextName: "Collect Payment",
-                              onPressed: (){
-                                NavigatorHelper().add(PaymentCollectScreen());
-                              }
-                          ),
-                        ),
-                      ),
+                      // visible: widget.isPick,
+                      // replacement: Center(
+                      //   child: Padding(
+                      //     padding: EdgeInsets.only(left: padding_20,right: padding_20,bottom: AppGlobal.hasBottomNotch(context)?padding_20:padding_20,top: padding_40),
+                      //     child: ButtonView(
+                      //         buttonTextName: "Collect Payment",
+                      //         onPressed: (){
+                      //           NavigatorHelper().add(PaymentCollectScreen());
+                      //         }
+                      //     ),
+                      //   ),
+                      // ),
                       child: Center(
                         child: Padding(
                           padding: EdgeInsets.only(left: padding_20,right: padding_20,bottom: AppGlobal.hasBottomNotch(context)?padding_20:padding_20,top: padding_40),
@@ -496,7 +497,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                 child: ButtonView(
                                   buttonTextName: widget.isDelivery?"Delivery":"PICKUP",
                                   onPressed: (){
-                                    NavigatorHelper().add(DeliveryScreen(isDelivery: widget.isDelivery,));
+                                    NavigatorHelper().add(DeliveryScreen(isDelivery: widget.isDelivery,orderDetail: viewModel.orderDetail,));
                                   },
                                 ),
                               ),

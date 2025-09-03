@@ -182,6 +182,30 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "geocoding",
+      "rootUri": "file:///Users/mac/.pub-cache/hosted/pub.dev/geocoding-4.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "geocoding_android",
+      "rootUri": "file:///Users/mac/.pub-cache/hosted/pub.dev/geocoding_android-4.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "geocoding_ios",
+      "rootUri": "file:///Users/mac/.pub-cache/hosted/pub.dev/geocoding_ios-3.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "geocoding_platform_interface",
+      "rootUri": "file:///Users/mac/.pub-cache/hosted/pub.dev/geocoding_platform_interface-3.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "google_maps",
       "rootUri": "file:///Users/mac/.pub-cache/hosted/pub.dev/google_maps-8.1.1",
       "packageUri": "lib/",
@@ -632,7 +656,7 @@
       "languageVersion": "3.7"
     }
   ],
-  "generated": "2025-08-29T06:01:41.614038Z",
+  "generated": "2025-09-01T05:37:00.333104Z",
   "generator": "pub",
   "generatorVersion": "3.7.2",
   "flutterRoot": "file:///Users/mac/Downloads/flutter_3.29.2",

@@ -71,7 +71,7 @@ class NetworkApiServices extends BaseApiServices{
     Map<String, String> header = {
       'accept': '*/*',
       'Content-Type': 'application/json',
-    'Cookie': 'frontend_lang=en_US; session_id=a9947080db7df3fcb95f924b8e49215aeaa56566'
+    'Cookie': 'frontend_lang=en_US; session_id=ce8e353508c55dfd1625d97799a77c77af18d423'
     };
 
 

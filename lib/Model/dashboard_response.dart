@@ -312,7 +312,7 @@ class DashboardDisplayOrder {
   String? custName;
   String? address;
   String? orderType;
-  bool? contact;
+  String? contact;
   String? date;
   String? amount;
 
@@ -335,7 +335,7 @@ class DashboardDisplayOrder {
     custName = json['cust_name'];
     address = json['address'];
     orderType = json['order_type'];
-    contact = json['contact'];
+    contact = json['contact'].toString();
     date = json['date'];
     amount = json['amount'];
   }

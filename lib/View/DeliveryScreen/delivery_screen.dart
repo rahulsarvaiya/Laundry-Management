@@ -8,9 +8,12 @@ import 'package:driver/View/DeliveryScreen/delivery_screen_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
+
+import '../../Model/order_details_response_model.dart';
 class DeliveryScreen extends StatefulWidget {
   final bool isDelivery;
-  const DeliveryScreen({super.key, required this.isDelivery});
+  final OrderDetailResult? orderDetail;
+  const DeliveryScreen({super.key, required this.isDelivery, this.orderDetail});
 
   @override
   State<DeliveryScreen> createState() => _DeliveryScreenState();
@@ -23,7 +26,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
   @override
   void initState() {
     super.initState();
-    deliveryScreenViewModel.init(context);
+    deliveryScreenViewModel.init(context,widget.orderDetail);
   }
 
   @override
@@ -35,6 +38,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.orderDetail?.address??"");
     return ChangeNotifierProvider(
       create: (context) => deliveryScreenViewModel,
       child: Consumer<DeliveryScreenViewModel>(
@@ -52,6 +56,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                 if (viewModel.driverMarker != null) viewModel.driverMarker!,
                 viewModel.destinationMarker,
               },
+              polylines: viewModel.polylines,
               onMapCreated: (controller) => viewModel.mapController = controller,
             ),
 
@@ -70,10 +75,12 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                     ),
                   ),
                   ResponsiveText(
-                    text: "2020 Congress Ave,Austin, TX 78701",
+                    text: widget.orderDetail?.address??"",
                     style: Fonts.regularTextStyle.copyWith(
                       color: Colors.grey
                     ),
+                    maxLines: 2,
+                    textAlign: TextAlign.start,
                   ),
                   CommonWidget.getFieldSpacer(height: padding_20),
                   ButtonView(

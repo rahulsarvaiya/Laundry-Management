@@ -32,7 +32,7 @@ class OrderDetailResult {
   String? time;
   String? address;
   List<LineItems>? lineItems;
-  int? orderTotal;
+  String? orderTotal;
   dynamic paymentState;
 
   OrderDetailResult(
@@ -61,7 +61,7 @@ class OrderDetailResult {
         lineItems!.add(LineItems.fromJson(v));
       });
     }
-    orderTotal = json['order_total'];
+    orderTotal = json['order_total'].toString();
     paymentState = json['payment_state'];
   }
 
@@ -85,7 +85,7 @@ class OrderDetailResult {
 
 class LineItems {
   String? itemName;
-  int? qty;
+  num? qty;
 
   LineItems({this.itemName, this.qty});
 

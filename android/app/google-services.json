@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1039190751854",
+    "project_id": "driverapp-ab3b2",
+    "storage_bucket": "driverapp-ab3b2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1039190751854:android:a679bf64c0a819859e047f",
+        "android_client_info": {
+          "package_name": "com.washionic.driver"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKQXgs2sGqwPmdonBE-VbtkwzPonSQLVo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

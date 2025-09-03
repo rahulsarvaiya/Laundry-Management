@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:driver/Custom/button_view.dart';
 import 'package:driver/Helper/navigation_helper.dart';
 import 'package:driver/Style/fonts.dart';
@@ -6,10 +7,12 @@ import 'package:driver/Utils/Constants.dart';
 import 'package:driver/Utils/app_global.dart';
 import 'package:driver/View/BottomNavigationBar/bottom_navigation_bar_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import '../../Model/order_details_response_model.dart';
 import '../OrderDetail/pick_up_dialog.dart';
-
+import 'package:http/http.dart' as http;
 class DeliveryScreenViewModel extends ChangeNotifier{
 
   late BuildContext context;
@@ -18,8 +21,7 @@ class DeliveryScreenViewModel extends ChangeNotifier{
   GoogleMapController? mapController;
 
   LatLng? currentLatLng;
-  final LatLng _destinationLatLng = LatLng(19.0760, 72.8777); // Ahmedabad
-
+  LatLng _destinationLatLng = LatLng(19.0760, 72.8777); // Ahmedabad
   Marker? driverMarker;
   late Marker destinationMarker;
 
@@ -28,9 +30,9 @@ class DeliveryScreenViewModel extends ChangeNotifier{
   Set<Marker> markers = {};
   Set<Polyline> polylines = {};
 
-  init(BuildContext context){
+  init(BuildContext context,OrderDetailResult? orderDetails){
     this.context = context;
-
+    getCoordinatesFromAddress(orderDetails?.address??"Mumbai, India");
     _startLocationTracking();
     destinationMarker = Marker(
       markerId: MarkerId("destination"),
@@ -75,7 +77,6 @@ class DeliveryScreenViewModel extends ChangeNotifier{
       currentLatLng = newPosition;
       driverMarker = marker;
       notifyListeners();
-
     // Optionally move camera to follow driver
     mapController?.animateCamera(
       CameraUpdate.newLatLng(newPosition),
@@ -141,4 +142,108 @@ class DeliveryScreenViewModel extends ChangeNotifier{
     );
   }
 
+  Future<void> getCoordinatesFromAddress(String address) async {
+    try {
+      List<geocoding.Location> locations = await geocoding.locationFromAddress(address);
+
+      if (locations.isNotEmpty) {
+        geocoding.Location location = locations.first;
+        _destinationLatLng = LatLng(location.latitude, location.longitude);
+        _createRoute();
+        print("Latitude: ${location.latitude}, Longitude: ${location.longitude}");
+      } else {
+        print("No coordinates found for this address.");
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
+
+  Future<List<LatLng>> getRoadRoute(LatLng origin, LatLng destination) async {
+    const apiKey = "AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao";
+
+    final url = Uri.parse(
+      "https://maps.googleapis.com/maps/api/directions/json"
+          "?origin=${origin.latitude},${origin.longitude}"
+          "&destination=${destination.latitude},${destination.longitude}"
+          "&mode=driving" // driving | walking | bicycling | transit
+          "&key=$apiKey",
+    );
+
+    final response = await http.get(url);
+    final data = jsonDecode(response.body);
+
+    if (data["status"] == "OK") {
+      final points = data["routes"][0]["overview_polyline"]["points"];
+      return decodePolyline(points);
+    }
+    return [];
+  }
+
+  List<LatLng> decodePolyline(String encoded) {
+    List<LatLng> poly = [];
+    int index = 0, len = encoded.length;
+    int lat = 0, lng = 0;
+
+    while (index < len) {
+      int b, shift = 0, result = 0;
+      do {
+        b = encoded.codeUnitAt(index++) - 63;
+        result |= (b & 0x1f) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+      int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+      lat += dlat;
+
+      shift = 0;
+      result = 0;
+      do {
+        b = encoded.codeUnitAt(index++) - 63;
+        result |= (b & 0x1f) << shift;
+        shift += 5;
+      } while (b >= 0x20);
+      int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+      lng += dlng;
+
+      poly.add(LatLng(lat / 1E5, lng / 1E5));
+    }
+    return poly;
+  }
+
+  void _createRoute() async {
+    final routeCoords = await getRoadRoute(currentLatLng!, _destinationLatLng);
+    polylines.clear(); // clear old routes
+    polylines.add(Polyline(
+      polylineId: PolylineId('roadRoute'),
+      points: routeCoords,
+      color: Colors.blue,
+      width: 6,
+    ));
+
+    // Move camera to fit route
+    if (routeCoords.isNotEmpty) {
+      mapController?.animateCamera(
+        CameraUpdate.newLatLngBounds(
+          _boundsFromLatLngList(routeCoords),
+          50,
+        ),
+      );
+    }
+  }
+  LatLngBounds _boundsFromLatLngList(List<LatLng> list) {
+    double x0 = list.first.latitude, x1 = list.first.latitude;
+    double y0 = list.first.longitude, y1 = list.first.longitude;
+
+    for (LatLng latLng in list) {
+      if (latLng.latitude > x1) x1 = latLng.latitude;
+      if (latLng.latitude < x0) x0 = latLng.latitude;
+      if (latLng.longitude > y1) y1 = latLng.longitude;
+      if (latLng.longitude < y0) y0 = latLng.longitude;
+    }
+
+    return LatLngBounds(
+      southwest: LatLng(x0, y0),
+      northeast: LatLng(x1, y1),
+    );
+  }
 }

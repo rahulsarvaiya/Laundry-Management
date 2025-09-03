@@ -3,6 +3,7 @@ import 'package:driver/Custom/custom_text_button.dart';
 import 'package:driver/Custom/responsive_text.dart';
 import 'package:driver/Helper/assets_helper.dart';
 import 'package:driver/Helper/navigation_helper.dart';
+import 'package:driver/Helper/pref_name.dart';
 import 'package:driver/Style/Fonts.dart';
 import 'package:driver/Style/app_theme.dart';
 import 'package:driver/Utils/app_global.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../Helper/preference.dart';
 import '../Earning/earning_screen.dart';
 import '../Feedback/feedback_screen.dart';
 import '../LoadeDelivery/delivery_load_screen.dart';
@@ -501,7 +503,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         fontSize: fontSize_16,
                                       ),),
                                       CommonWidget.getFieldSpacer(height: padding_06),
-                                      Row(
+                                      viewModel.dashboardResult?.dashboardDisplayOrder!=null?SizedBox():Row(
                                         children: [
                                           Expanded(
                                             child: ButtonView(
@@ -653,7 +655,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   children: [
                     InkWell(
                       onTap: (){
-                        NavigatorHelper().add(OrderDetailScreen(isPick: true,isDelivery: false,isQuickOrder: false,orderId: viewModel.dashboardResult?.dashboardDisplayOrder?.orderId.toString(),orderType: viewModel.dashboardResult?.dashboardDisplayOrder?.orderType??"",));
+                        NavigatorHelper().add(OrderDetailScreen(isPick: viewModel.dashboardResult?.dashboardDisplayOrder?.orderType=="delivery"?false:true,isDelivery: viewModel.dashboardResult?.dashboardDisplayOrder?.orderType=="delivery"?true:false,isQuickOrder: false,orderId: viewModel.dashboardResult?.dashboardDisplayOrder?.orderId.toString(),orderType: viewModel.dashboardResult?.dashboardDisplayOrder?.orderType??"",));
                       },
                       child: Card(
                         elevation: 1,
@@ -709,6 +711,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 text: viewModel.dashboardResult?.dashboardDisplayOrder?.address??"",
                                 style: Fonts.regularTextStyle,
                                 maxLines: 2,
+                                textAlign: TextAlign.start,
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -741,7 +744,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Text(DateFormat("dd MMM yyyy, hh:mm a").format(DateFormat("yyyy-MM-dd HH:mm:ss").parse(viewModel.dashboardResult?.dashboardDisplayOrder?.date??"2025-07-21 14:26:16")),style: Fonts.regularTextStyle.copyWith(
+                                  Text(DateFormat("dd MMM yyyy").format(DateFormat("yyyy-MM-dd").parse(viewModel.dashboardResult?.dashboardDisplayOrder?.date??"2025-07-21")),style: Fonts.regularTextStyle.copyWith(
                                       color: Colors.grey
                                   ),
                                     textAlign: TextAlign.end,
@@ -783,13 +786,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 ),
                                 CommonWidget.getFieldSpacer(height: padding_10),
                                 ResponsiveText(
-                                  text: "Driver App",
+                                  text: PreferenceManager.getString(PrefName.name),
                                   style: Fonts.regularTextStyleMedium.copyWith(
                                     fontSize: fontSize_16
                                   ),
                                 ),
                                 ResponsiveText(
-                                  text: "abcxyz@gmail.com",
+                                  text: PreferenceManager.getString(PrefName.userName),
                                   style: Fonts.regularTextStyle.copyWith(
                                     fontSize: fontSize_14,
                                     color: Colors.grey
