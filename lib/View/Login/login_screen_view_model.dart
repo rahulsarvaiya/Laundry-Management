@@ -48,7 +48,7 @@ class LoginScreenViewModel extends ChangeNotifier{
       "params":{
        "username":emailController.text.trim(),
         "password":passwordController.text.trim(),
-        "db":db,
+        // "db":db,
       }
     };
     loginLoader.value = true;

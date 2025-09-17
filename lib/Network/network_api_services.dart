@@ -71,7 +71,7 @@ class NetworkApiServices extends BaseApiServices{
     Map<String, String> header = {
       'accept': '*/*',
       'Content-Type': 'application/json',
-    'Cookie': 'frontend_lang=en_US; session_id=ce8e353508c55dfd1625d97799a77c77af18d423'
+    'Cookie': 'frontend_lang=en_US; session_id=93bae60fe902301a228c400f3a5f6a4b336c516c'
     };
 
 
@@ -122,8 +122,14 @@ class NetworkApiServices extends BaseApiServices{
          AlertHelper.showToast("${response.statusCode} Bad gateway!");
           break;
       }
-    } on SocketException {
+    } on SocketException catch(error) {
+      AppGlobal.printLog("Socket Exception : ${error.message}");
       throw FetchDataException('No Internet Connection');
+    }
+    catch (e, stackTrace) {
+      AppGlobal.printLog("Unknown error: $e");
+      AppGlobal.printLog("StackTrace: $stackTrace");
+      rethrow;
     }
     return responseJson;
   }

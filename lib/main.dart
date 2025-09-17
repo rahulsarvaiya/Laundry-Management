@@ -7,6 +7,7 @@ import 'Helper/preference.dart';
 import 'Network/internet_connection_check.dart';
 import 'Utils/constants.dart';
 import 'View/Splash/splash_screen.dart';
+import 'base_screen.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,22 +25,24 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     InternetChecker().startMonitoring();
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => BottomNavigationBarScreenViewModel()),
-      ],
-      child: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(FocusNode());
-        },
-        child: MaterialApp(
-          title: 'Washionic Driver',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: AppColor.appPrimaryColor),
+    return BaseScreen(
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => BottomNavigationBarScreenViewModel()),
+        ],
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: MaterialApp(
+            title: 'Washionic Driver',
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(seedColor: AppColor.appPrimaryColor),
+            ),
+            debugShowCheckedModeBanner: false,
+            navigatorKey: navigatorKey,
+            home: SplashScreen(),
           ),
-          debugShowCheckedModeBanner: false,
-          navigatorKey: navigatorKey,
-          home: SplashScreen(),
         ),
       ),
     );

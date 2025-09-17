@@ -13,11 +13,11 @@ class OrderDoneDoneResponse {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['jsonrpc'] = this.jsonrpc;
-    data['id'] = this.id;
-    if (this.result != null) {
-      data['result'] = this.result!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['jsonrpc'] = jsonrpc;
+    data['id'] = id;
+    if (result != null) {
+      data['result'] = result!.toJson();
     }
     return data;
   }
@@ -36,10 +36,10 @@ class Result {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['message'] = this.message;
-    if (this.result != null) {
-      data['result'] = this.result!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['message'] = message;
+    if (result != null) {
+      data['result'] = result!.toJson();
     }
     return data;
   }
@@ -94,28 +94,28 @@ class OrderResult {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['order_id'] = this.orderId;
-    data['order_type'] = this.orderType;
-    data['quick_order'] = this.quickOrder;
-    data['delivery_done'] = this.deliveryDone;
-    data['delivery_img_url'] = this.deliveryImgUrl;
-    data['order_no'] = this.orderNo;
-    data['cust_name'] = this.custName;
-    data['delivery_date'] = this.deliveryDate;
-    data['address'] = this.address;
-    if (this.lineItems != null) {
-      data['line_items'] = this.lineItems!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['order_id'] = orderId;
+    data['order_type'] = orderType;
+    data['quick_order'] = quickOrder;
+    data['delivery_done'] = deliveryDone;
+    data['delivery_img_url'] = deliveryImgUrl;
+    data['order_no'] = orderNo;
+    data['cust_name'] = custName;
+    data['delivery_date'] = deliveryDate;
+    data['address'] = address;
+    if (lineItems != null) {
+      data['line_items'] = lineItems!.map((v) => v.toJson()).toList();
     }
-    data['order_total'] = this.orderTotal;
-    data['payment_state'] = this.paymentState;
+    data['order_total'] = orderTotal;
+    data['payment_state'] = paymentState;
     return data;
   }
 }
 
 class LineItems {
   String? itemName;
-  int? qty;
+  num? qty;
 
   LineItems({this.itemName, this.qty});
 
@@ -125,9 +125,9 @@ class LineItems {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['item_name'] = this.itemName;
-    data['qty'] = this.qty;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['item_name'] = itemName;
+    data['qty'] = qty;
     return data;
   }
 }

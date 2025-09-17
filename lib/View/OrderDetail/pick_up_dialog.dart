@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
@@ -8,135 +9,219 @@ import 'package:driver/Style/fonts.dart';
 import 'package:driver/Utils/app_global.dart';
 import 'package:driver/Utils/common_widget.dart';
 import 'package:driver/View/BottomNavigationBar/bottom_navigation_bar_screen.dart';
+import 'package:driver/View/OrderDetail/pick_up_dialog_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import '../../Custom/button_view.dart';
+import '../../Model/order_details_response_model.dart';
 import '../../Utils/constants.dart';
 import '../PaymentCollect/payment_collect_screen.dart';
 class PickUpDialog extends StatefulWidget {
   final bool isDelivery;
-  const PickUpDialog({super.key, required this.isDelivery});
+  final OrderDetailResult orderDetails;
+  const PickUpDialog({super.key, required this.isDelivery, required this.orderDetails});
 
   @override
   State<PickUpDialog> createState() => _PickUpDialogState();
 }
 
 class _PickUpDialogState extends State<PickUpDialog> {
+
+  PickUpDialogViewModel pickUpDialogViewModel = PickUpDialogViewModel();
+
+  @override
+  void initState() {
+    super.initState();
+    pickUpDialogViewModel.init(context);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: AppColor.appWhiteColor,
-      elevation: 0,
-      insetAnimationCurve: Curves.easeIn,
-      insetPadding: EdgeInsets.all(padding_20),
-      clipBehavior: Clip.none,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(padding_04)
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(top: padding_20,bottom: 0,left: 0,right: 0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ResponsiveText(
-              text: widget.isDelivery?'Delivery Confirmation':'Pickup Confirmation',
-              style: Fonts.regularTextStyleBold.copyWith(
-                fontSize: fontSize_18
-              ),
+    return ChangeNotifierProvider(
+      create: (context) => pickUpDialogViewModel,
+      child: Consumer<PickUpDialogViewModel>(
+        builder: (context, viewModel, child) {
+          return Dialog(
+            backgroundColor: AppColor.appWhiteColor,
+            elevation: 0,
+            insetAnimationCurve: Curves.easeIn,
+            insetPadding: EdgeInsets.all(padding_20),
+            clipBehavior: Clip.none,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(padding_04)
             ),
-            Divider(),
-            CommonWidget.getFieldSpacer(height: padding_08),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: padding_20),
-              child: Row(
+            child: Padding(
+              padding: const EdgeInsets.only(top: padding_20,bottom: 0,left: 0,right: 0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.circle,color: Colors.green,size: 14,),
-                  CommonWidget.getFieldSpacer(width: padding_10),
-                  Expanded(child: ResponsiveText(
-                    text: '2020 Congress Ave,Austin, TX 78701',
-                    style: Fonts.regularTextStyle,
-                    textAlign: TextAlign.start,
-                  ),),
-                ],
-              ),
-            ),
-            // CommonWidget.getFieldSpacer(height: padding_08),
-            // Padding(
-            //   padding: const EdgeInsets.symmetric(horizontal: padding_20),
-            //   child: Row(
-            //     children: [
-            //       Icon(Icons.circle,color: Colors.red,size: 14,),
-            //       CommonWidget.getFieldSpacer(width: padding_10),
-            //       Expanded(child: ResponsiveText(
-            //         text: '01 Market Street,San Francisco, CA 94105',
-            //         style: Fonts.regularTextStyle,
-            //         textAlign: TextAlign.start,
-            //       ),),
-            //     ],
-            //   ),
-            // ),
-            CommonWidget.getFieldSpacer(height: padding_20),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: padding_20),
-              child: InkWell(
-                onTap: (){
-                  showPicker();
-                },
-                child: _image!=null?SizedBox(
-                    height: 150,
-                    child: Image.file(File(_image!.path))):DottedBorder(
-                  options: RoundedRectDottedBorderOptions(
-                    dashPattern: [10, 5],
-                    strokeWidth: 2,
-                    padding: EdgeInsets.zero,
-                    color: Colors.grey.withValues(alpha: 0.5),
-                    radius: Radius.circular(padding_04)
+                  ResponsiveText(
+                    text: widget.isDelivery?'Delivery Confirmation':'Pickup Confirmation',
+                    style: Fonts.regularTextStyleBold.copyWith(
+                        fontSize: fontSize_18
+                    ),
                   ),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    padding: EdgeInsets.all(padding_10),
-                    height: 150,
-                    child: Center(
-                      child: Text(
-                        'Photo for package',
-                        style: Fonts.regularTextStyleMedium,
+                  Divider(),
+                  CommonWidget.getFieldSpacer(height: padding_08),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: padding_20),
+                    child: Row(
+                      children: [
+                        Icon(Icons.circle,color: Colors.green,size: 14,),
+                        CommonWidget.getFieldSpacer(width: padding_10),
+                        Expanded(child: ResponsiveText(
+                          text: '2020 Congress Ave,Austin, TX 78701',
+                          style: Fonts.regularTextStyle,
+                          textAlign: TextAlign.start,
+                        ),),
+                      ],
+                    ),
+                  ),
+                  // CommonWidget.getFieldSpacer(height: padding_08),
+                  // Padding(
+                  //   padding: const EdgeInsets.symmetric(horizontal: padding_20),
+                  //   child: Row(
+                  //     children: [
+                  //       Icon(Icons.circle,color: Colors.red,size: 14,),
+                  //       CommonWidget.getFieldSpacer(width: padding_10),
+                  //       Expanded(child: ResponsiveText(
+                  //         text: '01 Market Street,San Francisco, CA 94105',
+                  //         style: Fonts.regularTextStyle,
+                  //         textAlign: TextAlign.start,
+                  //       ),),
+                  //     ],
+                  //   ),
+                  // ),
+                  CommonWidget.getFieldSpacer(height: padding_20),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: padding_20),
+                    child: InkWell(
+                      onTap: (){
+                        showPicker();
+                      },
+                      child: _image!=null?SizedBox(
+                          height: 150,
+                          child: Image.file(File(_image!.path))):DottedBorder(
+                        options: RoundedRectDottedBorderOptions(
+                            dashPattern: [10, 5],
+                            strokeWidth: 2,
+                            padding: EdgeInsets.zero,
+                            color: Colors.grey.withValues(alpha: 0.5),
+                            radius: Radius.circular(padding_04)
+                        ),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.all(padding_10),
+                          height: 150,
+                          child: Center(
+                            child: Text(
+                              'Photo for package',
+                              style: Fonts.regularTextStyleMedium,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                  CommonWidget.getFieldSpacer(height: padding_20),
+                  ValueListenableBuilder(
+                    valueListenable: viewModel.loader,
+                    builder: (context, value, child) {
+                      return ElevatedButton(
+                        onPressed: ()async {
+                          if(widget.isDelivery){
+                            if(_image!=null){
+                              List<int> imageBytes = await _image!.readAsBytes();
+                              Map<String, dynamic> body = {
+                                "jsonrpc":jsonrpc,
+                                "params":{
+                                  "delivery_done":true,
+                                  "invoice_no":widget.orderDetails.invoiceNo??"",
+                                  "image_file":{
+                                    "mime":viewModel.getMimeTypeFromExtension(_image?.path??""),
+                                    "data":base64Encode(imageBytes)
+                                  }
+                                }
+                              };
+                              AppGlobal.printLog(body);
+                              viewModel.callOrderDelivery(body);
+                            }
+                            else{
+                              Map<String, dynamic> body = {
+                                "jsonrpc":jsonrpc,
+                                "params":{
+                                  "delivery_done":true,
+                                  "invoice_no":widget.orderDetails.invoiceNo??"",
+                                }
+                              };
+                              AppGlobal.printLog(body);
+                              viewModel.callOrderDelivery(body);
+                            }
+                          }
+                          else{
+                            if(_image!=null){
+                              List<int> imageBytes = await _image!.readAsBytes();
+                              Map<String, dynamic> body = {
+                                "jsonrpc":jsonrpc,
+                                "params":{
+                                  "pickup_done":true,
+                                  "order_id":widget.orderDetails.invoiceNo??"",
+                                  "image_file":{
+                                    "mime":viewModel.getMimeTypeFromExtension(_image?.path??""),
+                                    "data":base64Encode(imageBytes)
+                                  }
+                                }
+                              };
+                              AppGlobal.printLog(body);
+                              viewModel.callPickUpOrder(body);
+                            }
+                            else{
+                              Map<String, dynamic> body = {
+                                "jsonrpc":jsonrpc,
+                                "params":{
+                                  "pickup_done":true,
+                                  "order_id":widget.orderDetails.invoiceNo??"",
+                                }
+                              };
+                              AppGlobal.printLog(body);
+                              viewModel.callPickUpOrder(body);
+                            }
+                          }
+                          // print(widget.orderDetails.invoiceNo??"");
+                          // if(widget.isDelivery){
+                          //   NavigatorHelper.remove();
+                          //   NavigatorHelper().add(PaymentCollectScreen());
+                          // }
+                          // else{
+                          //   AppGlobal.bottomNavigationIndex.value =0;
+                          //   NavigatorHelper.replace(BottomNavigationBarScreen());
+                          // }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          maximumSize: Size(MediaQuery.of(context).size.width, 45),
+                          minimumSize: Size(MediaQuery.of(context).size.width, 45),
+                          backgroundColor: Colors.green,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero
+                          ),
+                        ),
+                        clipBehavior: Clip.none,
+                        child: viewModel.loader.value?Center(child: CircularProgressIndicator(color: AppColor.appWhiteColor,),): Text("Confirm",style: Fonts.regularTextStyleMedium.copyWith(
+                            color: AppColor.appWhiteColor
+                        ),),
+                      );
+                    },
+                  )
+
+
+                ],
               ),
             ),
-            CommonWidget.getFieldSpacer(height: padding_20),
-            ElevatedButton(
-              onPressed: () {
-                if(widget.isDelivery){
-                  NavigatorHelper.remove();
-                  NavigatorHelper().add(PaymentCollectScreen());
-                }
-                else{
-                  AppGlobal.bottomNavigationIndex.value =0;
-                  NavigatorHelper.replace(BottomNavigationBarScreen());
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                elevation: 0,
-                maximumSize: Size(MediaQuery.of(context).size.width, 45),
-                minimumSize: Size(MediaQuery.of(context).size.width, 45),
-                backgroundColor: Colors.green,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.zero
-                ),
-              ),
-              clipBehavior: Clip.none,
-              child: Text("Confirm",style: Fonts.regularTextStyleMedium.copyWith(
-                color: AppColor.appWhiteColor
-              ),),
-            )
-
-
-          ],
-        ),
+          );
+        },
       ),
     );
   }

@@ -34,6 +34,7 @@ class OrderDetailResult {
   List<LineItems>? lineItems;
   String? orderTotal;
   dynamic paymentState;
+  String? invoiceNo;
 
   OrderDetailResult(
       {this.orderId,
@@ -45,7 +46,9 @@ class OrderDetailResult {
         this.address,
         this.lineItems,
         this.orderTotal,
-        this.paymentState});
+        this.paymentState,
+        this.invoiceNo,
+      });
 
   OrderDetailResult.fromJson(Map<String, dynamic> json) {
     orderId = json['order_id'];
@@ -54,6 +57,7 @@ class OrderDetailResult {
     orderNo = json['order_no'];
     custName = json['cust_name'];
     time = json['time'];
+    invoiceNo = json['invoice_no'];
     address = json['address'].toString();
     if (json['line_items'] != null) {
       lineItems = <LineItems>[];
@@ -74,6 +78,7 @@ class OrderDetailResult {
     data['cust_name'] = custName;
     data['time'] = time;
     data['address'] = address;
+    data['invoice_no'] = invoiceNo;
     if (lineItems != null) {
       data['line_items'] = lineItems!.map((v) => v.toJson()).toList();
     }

@@ -47,7 +47,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
             appBar: AppBar(title: Text("Route")),
             body:  viewModel.currentLatLng == null
                 ? Center(child: CircularProgressIndicator())
-                : GoogleMap(
+                : Text("Google map")/*GoogleMap(
               initialCameraPosition: CameraPosition(
                 target: viewModel.currentLatLng!,
                 zoom: 16,
@@ -58,7 +58,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
               },
               polylines: viewModel.polylines,
               onMapCreated: (controller) => viewModel.mapController = controller,
-            ),
+            )*/,
 
             bottomNavigationBar: Container(
               color: AppColor.appWhiteColor,
@@ -87,7 +87,7 @@ class _DeliveryScreenState extends State<DeliveryScreen> {
                     // buttonTextName: viewModel.startRide?"Delivered":"Start",
                     buttonTextName:widget.isDelivery?"Delivery": "Pickup",
                     onPressed: (){
-                      viewModel.pickUpOrderDialog(widget.isDelivery);
+                      viewModel.pickUpOrderDialog(widget.isDelivery,widget.orderDetail!);
 
                         // viewModel.showDeliveryDialog();
                       // if(viewModel.startRide){

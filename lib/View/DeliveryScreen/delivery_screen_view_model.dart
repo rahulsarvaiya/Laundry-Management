@@ -94,11 +94,11 @@ class DeliveryScreenViewModel extends ChangeNotifier{
   }
 
 
-  pickUpOrderDialog(bool isDelivery){
+  pickUpOrderDialog(bool isDelivery,OrderDetailResult orderDetails){
     showDialog(
       context: context,
       builder: (context) {
-        return PickUpDialog(isDelivery: isDelivery,);
+        return PickUpDialog(isDelivery: isDelivery,orderDetails: orderDetails,);
       },
     );
   }
