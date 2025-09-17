@@ -167,7 +167,7 @@ class _PickUpDialogState extends State<PickUpDialog> {
                                 "jsonrpc":jsonrpc,
                                 "params":{
                                   "pickup_done":true,
-                                  "order_id":widget.orderDetails.invoiceNo??"",
+                                  "order_id":widget.orderDetails.orderId??0,
                                   "image_file":{
                                     "mime":viewModel.getMimeTypeFromExtension(_image?.path??""),
                                     "data":base64Encode(imageBytes)
@@ -182,7 +182,7 @@ class _PickUpDialogState extends State<PickUpDialog> {
                                 "jsonrpc":jsonrpc,
                                 "params":{
                                   "pickup_done":true,
-                                  "order_id":widget.orderDetails.invoiceNo??"",
+                                  "order_id":widget.orderDetails.orderId??0,
                                 }
                               };
                               AppGlobal.printLog(body);
